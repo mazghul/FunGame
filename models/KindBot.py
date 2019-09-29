@@ -7,5 +7,3 @@ class KindBot(Bot):
         self.choice = 0
         self.name = "Kind Bot"
 
-    def get_choice(self):
-        return self.choice
