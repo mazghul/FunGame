@@ -3,6 +3,7 @@ from models.KindBot import KindBot
 from models.EvilBot import EvilBot
 from models.CopyBot import CopyBot
 from models.GrudgerBot import GrudgerBot
+from models.Tour import Tour
 
 
 class Game:

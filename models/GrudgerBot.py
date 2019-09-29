@@ -4,7 +4,7 @@ from models.KindBot import KindBot
 class GrudgerBot(KindBot):
     def __init__(self):
         super().__init__()
-        self.name = "Copy Cat Bot"
+        self.name = "Grudger Bot"
         self.previous_value = -1
 
     def get_choice(self):
