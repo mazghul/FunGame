@@ -2,6 +2,7 @@ from models.Players import Player
 from models.KindBot import KindBot
 from models.EvilBot import EvilBot
 from models.CopyBot import CopyBot
+from models.GrudgerBot import GrudgerBot
 
 
 class Game:
@@ -13,7 +14,7 @@ class Game:
 
     def single_player(self):  # player1 should always be player Player 2 can be evilbot/ kindbot/ copybot TODO check
         self.p_1 = Player()
-        self.p_2 = CopyBot()  # TODO Get KindBOT / Evil bot / CopyBot from user
+        self.p_2 = GrudgerBot()  # TODO Get KindBOT / Evil bot / CopyBot from user
         self.initialize_players()
 
     def dual_player(self):
