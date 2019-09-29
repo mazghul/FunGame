@@ -6,10 +6,11 @@ def main():
         print("Welcome to The Fun Game !!!\n")
         game = Game()
         game.rounds = 5
-        print("1. Single player\n2. Double player\n3. Demo\n4. Exit")
+        print("1. Single player (Player vs Bot)\n2. Double player (Player vs Player)\n"
+              "3. Demo (KindBot vs Evil Bot)\n4. Exit")
         choice = input("Enter your option : ")
         if choice in ["1", "2", "3"]:
-            game.initialize_options(int(choice))
+            game.initialize(int(choice))
 
         elif choice == "4":
             exit()

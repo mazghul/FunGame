@@ -7,5 +7,3 @@ class EvilBot(Bot):
         self.choice = 1
         self.name = "Evil Bot"
 
-    def get_choice(self):
-        return self.choice

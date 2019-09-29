@@ -3,40 +3,39 @@ from models.KindBot import KindBot
 from models.EvilBot import EvilBot
 from models.CopyBot import CopyBot
 
-import random
-
 
 class Game:
     def __init__(self, rounds=None):
         self.rounds = rounds
         self.p_1 = None
         self.p_2 = None
+        self.option = None
 
-    def single_player(self):  # player1 will always be player .. Player 2 can be evilbot or kindbot or copybot
+    def single_player(self):  # player1 should always be player Player 2 can be evilbot/ kindbot/ copybot TODO check
         self.p_1 = Player()
-        self.p_2 = CopyBot()  # TODO: KindBOT / Evil bot
+        self.p_2 = CopyBot()  # TODO Get KindBOT / Evil bot / CopyBot from user
+        self.initialize_players()
 
     def dual_player(self):
         self.p_1 = Player()
         self.p_2 = Player()
+        self.initialize_players()
 
     def demo_game(self):
-        self.p_1 = KindBot()
+        self.p_1 = CopyBot()
         self.p_2 = EvilBot()
 
-    def initialize_options(self, option):
-        if option != 3:
-            if option == 1:
-                self.single_player()
-            else:
-                self.dual_player()
-            self.initialize_players(option)
+    def initialize(self, option):
+        self.option = option
+        if option == 1:
+            self.single_player()
+        elif option == 2:
+            self.dual_player()
         else:
             self.demo_game()
         print("\n" + "-" * 20 + "Start Game" + "-" * 20 + "\n")
-        self.start_game(option)
+        self.start_game()
         self.print_results(self.p_1.score, self.p_2.score)
-
 
     @staticmethod
     def compare(x, y):
@@ -50,50 +49,44 @@ class Game:
         else:
             return [3, -1]
 
-    def calculate(self, p_1, p_2):
-        result = self.compare(p_1.get_choice(), p_2.get_choice())
-        p_1.score += result[0]
-        p_2.score += result[1]
+    def calculate(self):
+        result = self.compare(self.p_1.get_choice(), self.p_2.get_choice())
+        self.p_1.score += result[0]
+        self.p_2.score += result[1]
 
-    @staticmethod
-    def get_user_input(player):
-        while True:
-            choice =  input(player.name + " Enter your choice (0 for Co-operate, 1 for Cheat): ") # str(random.randint(0, 1))  #
-            if choice in ["0", "1"]:
-                player.choice = int(choice)
-                player.choices.append(player.choice)
-                break
-            else:
-                print("\nEnter a valid input either 0 or 1")
-
-    def start_game(self, option):
+    def start_game(self):
         for i in range(self.rounds):
-            if option == 3:
-                self.calculate(self.p_1, self.p_2)
-            else:
-                self.get_user_input(self.p_1)
-                if option == 2:
-                    self.get_user_input(self.p_2)
-                self.calculate(self.p_1, self.p_2)
-            print(
-                "input\t {0} : {1}\t {2} : {3}".format(self.p_1.name, self.p_1.get_choice(), self.p_2.name, self.p_2.get_choice()))
-            print("score\t {0} : {1}\t {2} : {3}".format(self.p_1.name, self.p_1.score, self.p_2.name, self.p_2.score))
-            print("-" * 50)
-            if option == 1 and self.p_2.name == "Copy Cat Bot":
-                self.p_2.previous_value = self.p_1.get_choice()
+            self.start_round()
+            self.print_round_result()
+            self.round_completed()
 
-    @staticmethod
-    def get_user_name(p):
-        result = input("Enter your name : ")
-        return result
+    def start_round(self):
+        if self.option == 3:
+            self.calculate()
+        else:
+            self.p_1.get_user_input()
+            if self.option == 2:
+                self.p_2.get_user_input()
+            self.calculate()
 
-    def initialize_players(self, options=1):
+    def print_round_result(self):
+        print(
+            "input\t {0} : {1}\t {2} : {3}".format(self.p_1.name, self.p_1.get_choice(), self.p_2.name,
+                                                   self.p_2.get_choice()))
+        print("score\t {0} : {1}\t {2} : {3}".format(self.p_1.name, self.p_1.score, self.p_2.name, self.p_2.score))
+        print("-" * 50)
+
+    def round_completed(self):
+        self.p_1.round_completed(self.p_2.get_choice())
+        self.p_2.round_completed(self.p_1.get_choice())
+
+    def initialize_players(self):
         print("Player 1")
-        self.p_1.name = self.get_user_name(self.p_1)
+        self.p_1.get_user_name()
 
-        if options == 2:
+        if self.option == 2:
             print("Player 2")
-            self.p_2.name = self.get_user_name(self.p_2)
+            self.p_2.get_user_name()
 
     def print_results(self, p_1s, p_2s):
         print(
